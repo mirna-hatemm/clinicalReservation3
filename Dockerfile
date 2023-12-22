@@ -25,6 +25,9 @@ COPY --from=build /app/dist/clinic-reservation usr/share/nginx/html
 COPY --from=build /app/dist/clinic-reservation/assets/config/config.json /usr/share/nginx/html/config/config.json
 # Remove the ENTRYPOINT line if it exists since we'll use CMD
 
+RUN chown -R nginx:nginx /usr/share/nginx/html/assets/config \
+    && chmod -R 755 /usr/share/nginx/html/assets/config
+
 # Update CMD to perform envsubst and start nginx
 # This command replaces the environment variable placeholders in config.json with the actual values and starts Nginx
 CMD envsubst '\$BACKEND_URL' < /usr/share/nginx/html/assets/config/config.json > /usr/share/nginx/html/assets/config/config.temp.json \
